@@ -1,0 +1,151 @@
+{
+  "login": {
+    "title": "Accedi a Storytel",
+    "subtitle": "Accedi alla tua libreria di audiolibri",
+    "email": "Indirizzo email",
+    "password": "Password",
+    "signIn": "Accedi",
+    "signingIn": "Accesso in corso...",
+    "errors": {
+      "required": "Inserisci sia email che password",
+      "failed": "Accesso fallito"
+    }
+  },
+  "dashboard": {
+    "title": "La mia libreria",
+    "logout": "Esci",
+    "search": "Cerca libri...",
+    "noBooks": "Nessun libro trovato",
+    "emptyLibrary": "La tua libreria sembra vuota.",
+    "loading": "Caricamento della tua libreria...",
+    "loadError": "Impossibile caricare la libreria",
+    "filters": {
+      "notStarted": "Non iniziati",
+      "started": "In corso",
+      "concluded": "Conclusi"
+    }
+  },
+  "player": {
+    "chapters": "Capitoli",
+    "bookmarks": "Segnalibri",
+    "addBookmark": "Aggiungi segnalibro",
+    "speed": "Velocità",
+    "goTo": "Vai a",
+    "goto": "Vai a",
+    "playing": "In riproduzione",
+    "paused": "In pausa",
+    "nowPlaying": "In riproduzione:",
+    "loadingAudio": "Caricamento audio...",
+    "loadingBookData": "Caricamento dati libro...",
+    "loadError": "Impossibile caricare lo stream audio",
+    "loadChaptersError": "Impossibile caricare i capitoli",
+    "loadBookmarksError": "Impossibile caricare i segnalibri"
+  },
+  "bookmarks": {
+    "title": "I tuoi Bookmarks",
+    "noBookmarks": "Nessun bookmark salvato",
+    "createNew": "Crea Nuovo Bookmark",
+    "createTitle": "Crea Nuovo Bookmark",
+    "editTitle": "Modifica Bookmark",
+    "deleteTitle": "Elimina Bookmark",
+    "deleteConfirm": "Sei sicuro di voler eliminare questo bookmark?",
+    "deleteWarning": "Questa azione non può essere annullata.",
+    "currentPosition": "Posizione attuale:",
+    "position": "Posizione:",
+    "note": "Nota",
+    "noteOptional": "Nota (opzionale)",
+    "notePlaceholderCreate": "Aggiungi una nota a questo bookmark...",
+    "notePlaceholderEdit": "Modifica la nota per questo bookmark...",
+    "save": "Salva Bookmark",
+    "saveChanges": "Salva Modifiche",
+    "tooltipEdit": "Modifica bookmark",
+    "tooltipDelete": "Elimina bookmark"
+  },
+  "common": {
+    "loading": "Caricamento...",
+    "error": "Errore",
+    "cancel": "Annulla",
+    "save": "Salva",
+    "delete": "Elimina",
+    "close": "Chiudi"
+  },
+  "bookCard": {
+    "completed": "Completato",
+    "remaining": "rimanenti",
+    "author": "Autore:",
+    "narrator": "Narratore:"
+  },
+  "bookView": {
+    "saved": "Salvato",
+    "listen": "Ascolta",
+    "language": "Lingua",
+    "duration": "Durata",
+    "category": "Categoria",
+    "noDescription": "Nessuna descrizione disponibile.",
+    "showMore": "mostra di più",
+    "showLess": "mostra meno",
+    "details": "Dettagli Libro:"
+  },
+  "chapters": {
+    "title": "Capitoli",
+    "noChapters": "Nessun capitolo disponibile",
+    "chapter": "Capitolo"
+  },
+  "gotoModal": {
+    "title": "Vai al Tempo",
+    "description": "Inserisci il tempo desiderato (considerando la velocità {{speed}}x)",
+    "hours": "Ore",
+    "minutes": "Min",
+    "seconds": "Sec",
+    "cancel": "Annulla",
+    "go": "Vai a"
+  },
+  "playbackSpeed": {
+    "title": "Velocità di Riproduzione",
+    "presets": "Velocità Predefinite",
+    "custom": "Velocità Personalizzata",
+    "confirm": "Conferma"
+  },
+  "tray": {
+    "noBookPlaying": "Nessun libro in riproduzione",
+    "showApp": "Mostra App",
+    "play": "Play",
+    "pause": "Pausa",
+    "playPause": "Play/Pausa",
+    "playbackSpeed": "Velocità di Riproduzione",
+    "logout": "Logout",
+    "quit": "Esci"
+  },
+  "logout": {
+    "confirmTitle": "Conferma Logout",
+    "confirmMessage": "Sei sicuro di voler effettuare il logout?",
+    "confirmButton": "Logout",
+    "cancelButton": "Annulla"
+  },
+  "download": {
+    "cancelTitle": "Annulla Download",
+    "cancelMessage": "Sei sicuro di voler annullare il download in corso?",
+    "cancelWarning": "Il file parzialmente scaricato verrà eliminato.",
+    "cancelButton": "Annulla Download",
+    "continueButton": "Continua Download",
+    "deleteTitle": "Elimina File Scaricato",
+    "deleteMessage": "Sei sicuro di voler eliminare il file scaricato?",
+    "deleteWarning": "Dovrai scaricarlo nuovamente per ascoltarlo offline.",
+    "deleteButton": "Elimina File",
+    "keepButton": "Mantieni File"
+  },
+  "updater": {
+    "available": {
+      "title": "Aggiornamento Disponibile",
+      "message": "È disponibile una nuova versione:",
+      "download": "Scarica",
+      "later": "Più tardi"
+    },
+    "ready": {
+      "title": "Aggiornamento Pronto",
+      "message": "Aggiornamento scaricato. Riavvia per installare la versione:",
+      "restart": "Riavvia Ora",
+      "later": "Più tardi"
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "name": "storytel-player",
+  "version": "1.2.2",
+  "email": "andrea@debbaweb.it",
+  "description": "Storytel Unofficial Player - Storytel audiobook player for desktop",
+  "main": "dist/electron/main.js",
+  "homepage": "./",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm install && npm start",
+    "client": "cd client && npm install && npm start",
+    "build": "cd client && npm run build",
+    "build-win": "cd client && npm run build-win",
+    "dev": "concurrently \"npm run server:dev\" \"npm run client\"",
+    "server:dev": "cd server && npm install && npm run dev",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "electron:build": "tsc -p tsconfig.electron.json",
+    "electron": "npm run electron:build && electron .",
+    "electron:dev": "npm run electron:build && NODE_ENV=development electron .",
+    "electron:pack": "electron-builder",
+    "electron:dist": "npm run build && npm run server:build && npm run electron:build && electron-builder",
+    "electron:dist:win": "npm run build && npm run server:build && npm run electron:build && electron-builder --windows --x64",
+    "electron:dist:linux:x64:pacman": "npm run build && npm run server:build && npm run electron:build && electron-builder --x64 -l pacman",
+    "electron:dist:linux:x64": "npm run build && npm run server:build && npm run electron:build && electron-builder --x64 -l tar.gz deb rpm AppImage",
+    "electron:dist:linux:arm64": "npm run build && npm run server:build && npm run electron:build && electron-builder --arm64 -l tar.gz deb rpm AppImage",
+    "electron:dist:linux:arm": "npm run build && npm run server:build && npm run electron:build && electron-builder --armv7l -l tar.gz deb rpm AppImage",
+    "electron:dist:linux": "npm run build && npm run server:build && npm run electron:build && electron-builder --linux",
+    "electron:dist:mac:x64": "npm run build && npm run server:build && npm run electron:build && electron-builder --mac --x64",
+    "electron:dist:mac:arm64": "npm run build && npm run server:build && npm run electron:build && electron-builder --mac --arm64",
+    "preelectron:pack": "npm run build && npm run server:build && npm run electron:build",
+    "preelectron": "npm run build && npm run server:build",
+    "server:build": "cd server && npm run build",
+    "clean": "rm -rf dist; rm -rf server/dist; rm -rf client/build"
+  },
+  "author": "debba <andrea@debbaweb.it>",
+  "license": "MIT",
+  "dependencies": {
+    "dot-object": "^2.1.5",
+    "electron-store": "^10.1.0",
+    "electron-updater": "^6.6.2"
+  },
+  "keywords": [
+    "storytel",
+    "audiobook",
+    "web",
+    "react",
+    "express"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.28.3",
+    "@babel/core": "^7.28.4",
+    "@babel/node": "^7.28.0",
+    "@babel/preset-env": "^7.28.3",
+    "@babel/preset-react": "^7.27.1",
+    "@types/dot-object": "^2.1.6",
+    "@types/node": "^24.6.0",
+    "concurrently": "^7.6.0",
+    "electron": "^38.2.1",
+    "electron-builder": "^26.0.12",
+    "typescript": "^5.9.2"
+  },
+  "build": {
+    "appId": "com.storytel.player",
+    "productName": "Storytel Player",
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    },
+    "asarUnpack": [
+      "server/**"
+    ],
+    "files": [
+      "assets/**/*",
+      "client/build/**/*",
+      "dist/electron/**/*",
+      "server/dist/**/*",
+      "node_modules/**/*",
+      "downloads/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.audio",
+      "publish": {
+        "provider": "github",
+        "releaseType": "draft"
+      }
+    },
+    "win": {
+      "target": "nsis",
+      "verifyUpdateCodeSignature": false,
+      "publish": {
+        "provider": "github",
+        "releaseType": "draft"
+      }
+    },
+    "linux": {
+      "category": "multimedia",
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "assets/icon.png",
+      "publish": {
+        "provider": "github",
+        "releaseType": "draft"
+      }
+    }
+  }
+}
