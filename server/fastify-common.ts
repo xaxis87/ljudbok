@@ -36,10 +36,43 @@ dotenv.config({
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production';
 const DOWNLOADS_DIR = process.env.IS_ELECTRON ? ''+process.env.DOWNLOAD_PATH : path.join(__dirname, 'downloads');
+const METADATA_FILE = path.join(DOWNLOADS_DIR, '.metadata.json');
 
 // Ensure downloads directory exists
 if (!fs.existsSync(DOWNLOADS_DIR)) {
     fs.mkdirSync(DOWNLOADS_DIR, { recursive: true });
+}
+
+// Helper to read/write metadata mapping bookId to filename
+function readMetadata(): Record<string, string> {
+    try {
+        if (fs.existsSync(METADATA_FILE)) {
+            return JSON.parse(fs.readFileSync(METADATA_FILE, 'utf-8'));
+        }
+    } catch (error) {
+        console.error('Error reading metadata:', error);
+    }
+    return {};
+}
+
+function writeMetadata(metadata: Record<string, string>) {
+    try {
+        fs.writeFileSync(METADATA_FILE, JSON.stringify(metadata, null, 2));
+    } catch (error) {
+        console.error('Error writing metadata:', error);
+    }
+}
+
+function addToMetadata(bookId: string, filename: string) {
+    const metadata = readMetadata();
+    metadata[bookId] = filename;
+    writeMetadata(metadata);
+}
+
+function removeFromMetadata(bookId: string) {
+    const metadata = readMetadata();
+    delete metadata[bookId];
+    writeMetadata(metadata);
 }
 
 const activeDownloads = new Map<string, {
@@ -413,11 +446,36 @@ function sanitizeFilename(filename: string): string {
         .substring(0, 200); // Limit length to avoid filesystem issues
 }
 
-// Helper function to find downloaded file by bookId
-function findDownloadedFile(bookId: string): string | null {
+// Helper function to find downloaded file by bookId or title/author
+function findDownloadedFile(bookId: string, title?: string, author?: string): string | null {
     try {
+        // First check metadata for exact match
+        const metadata = readMetadata();
+        if (metadata[bookId]) {
+            const metadataPath = path.join(DOWNLOADS_DIR, metadata[bookId]);
+            if (fs.existsSync(metadataPath)) {
+                return metadataPath;
+            }
+        }
+
         const files = fs.readdirSync(DOWNLOADS_DIR);
-        // Look for files that end with [bookId].mp3 or match bookId.mp3 exactly
+
+        // Try to find by title and author if provided
+        if (title && author) {
+            const expectedFilename = `${sanitizeFilename(`${title} - ${author}`)}.mp3`;
+            const exactMatch = files.find(file => file === expectedFilename);
+            if (exactMatch) {
+                return path.join(DOWNLOADS_DIR, exactMatch);
+            }
+        } else if (title) {
+            const expectedFilename = `${sanitizeFilename(title)}.mp3`;
+            const exactMatch = files.find(file => file === expectedFilename);
+            if (exactMatch) {
+                return path.join(DOWNLOADS_DIR, exactMatch);
+            }
+        }
+
+        // Fallback: Look for old format with [bookId].mp3 or bookId.mp3 for backward compatibility
         const matchingFile = files.find(file =>
             file === `${bookId}.mp3` || file.endsWith(`[${bookId}].mp3`)
         );
@@ -436,18 +494,18 @@ fastify.post<{
     try {
         const { bookId, title, author } = request.body;
 
-        // Create a meaningful filename
+        // Create a meaningful filename without bookId
         let filename = bookId;
         if (title && author) {
-            filename = `${sanitizeFilename(`${title} - ${author}`)} [${bookId}]`;
+            filename = sanitizeFilename(`${title} - ${author}`);
         } else if (title) {
-            filename = `${sanitizeFilename(title)} [${bookId}]`;
+            filename = sanitizeFilename(title);
         }
 
         const localFilePath = path.join(DOWNLOADS_DIR, `${filename}.mp3`);
 
         // Check if already exists (with any filename)
-        const existingFile = findDownloadedFile(bookId);
+        const existingFile = findDownloadedFile(bookId, title, author);
         if (existingFile && fs.existsSync(existingFile)) {
             return reply.send({ success: true, message: 'File already downloaded', percentage: 100 });
         }
@@ -506,6 +564,9 @@ fastify.post<{
 
             // Clean up
             activeDownloads.delete(bookId);
+
+            // Add to metadata for future lookups
+            addToMetadata(bookId, `${filename}.mp3`);
 
             reply.send({ success: true, message: 'Download completed', percentage: 100 });
         } catch (error: any) {
@@ -675,6 +736,9 @@ fastify.delete<{
 
         // Delete the file
         fs.unlinkSync(localFilePath);
+
+        // Remove from metadata
+        removeFromMetadata(bookId);
 
         reply.send({ success: true, message: 'File deleted successfully' });
     } catch (error: any) {
