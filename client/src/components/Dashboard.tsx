@@ -103,10 +103,18 @@ function Dashboard({onLogout, triggerLogout, setTriggerLogout}: DashboardProps) 
                 continue; // Skip already downloaded books
             }
 
+            // Find the book object to get title and author
+            const book = books.find(b => String(b.abook.id) === bookId);
+            if (!book) continue;
+
             try {
                 setDownloadingBooks(prev => new Set(prev).add(bookId));
 
-                const response = await api.post('/download', { bookId });
+                const response = await api.post('/download', {
+                    bookId,
+                    title: book.book.name,
+                    author: book.book.authorsAsString
+                });
 
                 if (response.data.success) {
                     setDownloadedBooks(prev => new Set(prev).add(bookId));

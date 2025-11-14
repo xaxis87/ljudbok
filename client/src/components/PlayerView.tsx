@@ -129,7 +129,9 @@ function PlayerView() {
         setIsDownloading(true);
         try {
             const {data} = await api.post('/download', {
-                bookId
+                bookId,
+                title: book?.book?.name,
+                author: book?.book?.authorsAsString
             });
 
             if (data.success) {
