@@ -16,8 +16,7 @@ interface BookCardProps {
 function BookCard({book, onBookSelect, isSelected = false, onSelectToggle, selectionMode = false, isDownloading = false, isDownloaded = false}: BookCardProps) {
     const {t} = useTranslation();
 
-    const handleCheckboxClick = (e: React.MouseEvent) => {
-        e.stopPropagation();
+    const handleCheckboxClick = () => {
         if (onSelectToggle) {
             onSelectToggle(String(book.abook.id));
         }
@@ -42,14 +41,12 @@ function BookCard({book, onBookSelect, isSelected = false, onSelectToggle, selec
                     {selectionMode && (
                         <div
                             className="absolute top-0 left-0 z-10 p-2"
-                            onClick={handleCheckboxClick}
                         >
                             <input
                                 type="checkbox"
                                 checked={isSelected}
-                                onChange={() => {}}
+                                onChange={handleCheckboxClick}
                                 className="w-5 h-5 cursor-pointer"
-                                onClick={(e) => e.stopPropagation()}
                             />
                         </div>
                     )}

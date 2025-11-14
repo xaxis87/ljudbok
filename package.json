@@ -54,7 +54,7 @@
     "@babel/preset-env": "^7.28.3",
     "@babel/preset-react": "^7.27.1",
     "@types/dot-object": "^2.1.6",
-    "@types/node": "^24.6.0",
+    "@types/node": "^24.10.1",
     "concurrently": "^7.6.0",
     "electron": "^38.2.1",
     "electron-builder": "^26.0.12",
