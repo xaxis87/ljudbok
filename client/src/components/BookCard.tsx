@@ -6,10 +6,22 @@ import {useTranslation} from "react-i18next";
 interface BookCardProps {
     book: BookShelfEntity;
     onBookSelect: (book: BookShelfEntity) => void;
+    isSelected?: boolean;
+    onSelectToggle?: (bookId: string) => void;
+    selectionMode?: boolean;
+    isDownloading?: boolean;
+    isDownloaded?: boolean;
 }
 
-function BookCard({book, onBookSelect}: BookCardProps) {
+function BookCard({book, onBookSelect, isSelected = false, onSelectToggle, selectionMode = false, isDownloading = false, isDownloaded = false}: BookCardProps) {
     const {t} = useTranslation();
+
+    const handleCheckboxClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onSelectToggle) {
+            onSelectToggle(String(book.abook.id));
+        }
+    };
 
     const position = book.abookMark ? book.abookMark.pos : 0;
     const totalDuration = book.abook.time;
@@ -26,7 +38,40 @@ function BookCard({book, onBookSelect}: BookCardProps) {
 
         <div className="border-b border-gray-800 pb-6 relative group">
             <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0 flex flex-col">
+                <div className="flex-shrink-0 flex flex-col relative">
+                    {selectionMode && (
+                        <div
+                            className="absolute top-0 left-0 z-10 p-2"
+                            onClick={handleCheckboxClick}
+                        >
+                            <input
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={() => {}}
+                                className="w-5 h-5 cursor-pointer"
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                        </div>
+                    )}
+                    {isDownloading && (
+                        <div className="absolute top-0 right-0 z-10 p-2">
+                            <div className="bg-blue-600 rounded-full p-1">
+                                <svg className="w-4 h-4 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    )}
+                    {isDownloaded && !isDownloading && (
+                        <div className="absolute top-0 right-0 z-10 p-2">
+                            <div className="bg-green-600 rounded-full p-1">
+                                <svg className="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                        </div>
+                    )}
                     <img
                         src={"https://www.storytel.com" + (book.book.largeCover || book.book.largeCoverE)}
                         alt={book.book.name}
@@ -60,18 +105,20 @@ function BookCard({book, onBookSelect}: BookCardProps) {
                 </div>
             </div>
 
-            <div
-                className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
-                onClick={() => onBookSelect(book)}
-            >
-                <div className="bg-black bg-opacity-75 rounded-full p-4">
-                    <button className="p-4 bg-orange-600 text-white rounded-full hover:bg-orange-700 transition-colors">
-                        <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
-                    </button>
+            {!selectionMode && (
+                <div
+                    className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+                    onClick={() => onBookSelect(book)}
+                >
+                    <div className="bg-black bg-opacity-75 rounded-full p-4">
+                        <button className="p-4 bg-orange-600 text-white rounded-full hover:bg-orange-700 transition-colors">
+                            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }
